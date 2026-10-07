@@ -1,0 +1,18 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="5.809722">
+<testsuite name="reportsDemo.spec.ts" timestamp="2026-09-30T12:20:10.588Z" hostname="chromium" tests="2" failures="0" skipped="0" time="7.553" errors="0">
+<testcase name="title verification" classname="reportsDemo.spec.ts" time="3.696">
+<system-out>
+<![CDATA[test01
+afterEach hook
+]]>
+</system-out>
+</testcase>
+<testcase name="url verification" classname="reportsDemo.spec.ts" time="3.857">
+<system-out>
+<![CDATA[test02
+afterEach hook
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

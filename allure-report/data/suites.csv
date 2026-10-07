@@ -1,0 +1,3 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","3384","url verification","chromium","2026-10-01","passed","2026-10-01","","reportsDemo.spec.ts","",""
+"","3766","title verification","chromium","2026-10-01","passed","2026-10-01","","reportsDemo.spec.ts","",""

@@ -1,0 +1,19 @@
+[
+    {
+        "email":"priya_123@gmail.com",
+        "pass":"priya123",
+        "validity":"valid"
+    },
+    {
+        "email":"invalidemail",
+        "pass":"invalidpass",
+        "validity":"invalid"
+    },
+    {
+        "email":"",
+        "pass":"",
+        "validity":"invalid"
+    }
+
+
+]

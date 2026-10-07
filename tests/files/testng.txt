@@ -1,0 +1,1509 @@
+2 types of approach 
+------------------------
+TDD -->Test Driven Development -->TestNg
+BDD -->Behavioural Driven Development -->Cucumber 
+
+
+java+selenium+pom+data driven + baseclass+ testng 
+
+
+
+TestNg 
+---------
+Test for Next Generation 
+
+TestNG is a popular testing framework for Java created by cedric- beust and inspired by JUNIT .
+
+it has a new functionality that makes this framework more powerful and easier 
+
+It is an open source framework for automation test in java .
+
+It is used to write , organize and execute test cases for software application. 
+
+It is used to design our test cases in a systematic  way . 
+
+
+
+Advantages of testng 
+-------------------------
+-->It provide the default html report  and detailed report 
+--> Easy to set priority (we can prioritized the test cases)
+--> Easy to pass parameters(we can pass inputs as data from testNg.xml file using parameters)
+-->Data provider is possible (we can pass the bulk of datas at a time for the positive and negative testcases 
+combination )
+-->cross browser testing (To check the compatibility and stability of the application) and parallel execution
+is possible.
+-->Automatically rerun the failed testcases. 
+--> we can group the bulk of tescases and then we can skip or execute the testcases by using the group name . 
+-->It will support private methods.
+-->Assertion is possible (verify)
+
+=============================================================================
+
+INSTALLATION
+--------------------
+step 1
+---------
+testNg plugin
+ 
+Help --> Eclipse marketplace --> testng --> Install 
+
+step 2
+-------
+add dependency 
+Go to maven repository  --> search as testng  --> select version 7.4.0 
+
+step 3
+------
+add libraries to our project 
+
+Right click on the project -->select build path -->select configure build path -->select add library -->select testng
+ -->click next 
+
+===================================================================
+Annotations
+ ---------------
+Tesng anotations are markers in java that instruct the testing framework on how to execute test methods.
+
+
+1)Before suite  
+	Runs once before all test in the suite 
+
+2)BeforeTest 
+	Runs once before all the  test method in a <test> tag in testng.xml file 
+
+3)BeforeClass  
+	Runs once before all the test method in the class
+
+4)BeforeMethod  
+	Runs before each @Test method 
+
+5)Test
+	The actual test method
+ 
+6)AfterMethod  
+	Runs after each @Test method
+
+7)AfterClass 
+	Runs  once after all the test method in the class 
+
+8)AfterTest 
+	Runs  once after all the test method in a <test> tag in testng.xml
+  
+9)AfterSuite
+	Runs once after all the test in th suite have completed
+
+example 
+-----------
+package org.test;
+
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+public class Annotations {
+	
+	@BeforeSuite
+		private void beforeSuite() {
+			System.out.println("Before Suite");
+		}
+		
+	@BeforeTest
+		private void beforeTest() {
+			System.out.println("Before Test");
+
+		}
+		
+	@BeforeClass
+		private void beforeClass() {
+			System.out.println("Before Class");
+		}
+		
+	@BeforeMethod
+		private void beforeMethod() {
+			System.out.println("BeforeMethod");
+		}
+		
+		@Test
+		private void tc01() {
+			System.out.println("tc01");
+		}
+		
+		@Test
+		private void tc02() {
+			System.out.println(10/0);
+			System.out.println("tc02");
+		}
+		
+		@AfterMethod
+		private void afterMethod() {
+			System.out.println("After method");
+		}
+		
+		@AfterClass
+		private void afterclass() {
+			System.out.println("AfterClass");
+
+		}
+		
+		@AfterTest
+
+		private void afterTest() {
+			System.out.println("AfterTest");
+		}
+		
+		@AfterSuite
+		private void afterSuite() {
+		System.out.println("AfterSuite");
+		}
+}
+
+=====================================================================
+Attributes 
+------------
+The testng attribute is a form of configuration parameters 
+
+It can be set on testng annotations for different aspects of control over the running of tests.
+ 
+It should  has to be within the rounded brackets next to @Test annotation .
+
+It follow camel notation.
+
+@Test(attributeName = "attributevalue")
+
+
+1.priority :
+	It allows you to define the order in which test methods should be executed.
+	It ranges from -ve from +ve values
+
+2.description :
+	It allows you to add a actual description of the test method 
+	we can describe our test cases
+
+3.invocationCount:
+	It defines the number of times a test method is performed 
+
+4.enabled:
+	the enabled attribute is used to enable or disable a test method 
+
+
+5.dependsOnMethods :
+	It defines dependencies between test method 
+	It will depend upon another method 
+
+6.alwaysRun :
+	If we keep this attribute as true , it will help us to have a soft dependency.
+	
+
+7.timeOut :
+	we are providing some time period for the particular test case to run within the seconds , 
+
+8.invocationCount , timeOut :
+	it will equally provide the time period for each one of the run . 
+
+9.invocationCount ,invocationTimeOut:
+	It will set the time period for overall run .
+
+10.expectedExceptions =Exception.class:
+	It will ignore the exception for the particular test cases.
+
+
+example 
+----------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class Attributes {
+
+	@Test (priority=-2,description = "Test case for login function",expectedExceptions = Exception.class)
+	private void login() {
+		System.out.println("Login functionality");
+		System.out.println(10/0);
+	}
+	
+	@Test(priority = -1,dependsOnMethods ="login",alwaysRun = true )
+	private void homePage() {
+	System.out.println("Home page Functionality");
+	}
+	
+	@Test(priority = 0,invocationCount =2 ,invocationTimeOut  = 2000)
+	private void productPage() {
+		System.out.println("ProductPage Functionality");
+	}
+	
+	@Test(priority = 1,timeOut =2000)
+	private void addToCart() throws InterruptedException {
+		Thread.sleep(2100);
+	System.out.println("AddTocart Functionality");
+	}
+}
+
+========================================================================
+suite level execution 
+-------------------------
+
+In TestNG, "suite level execution" means running a collection of test cases defined within a single test suite.
+
+which is essentially a group of related tests managed together in an XML file, allowing you to execute all the tests 
+within that suite as a single unit
+
+example 
+----------
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+    <classes>
+      <class name="org.test.SampleTest1"/>
+      <class name="org.test.SampleTest2"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+=================================================================
+Assertion 
+------------
+1.In TestNG, assertions are lines of code that verify if a test passed or failed
+2.If the condition becomes fail in assertion , it will throw an assertion error  immediately. 
+3.It will halt my program execution.
+
+
+verify 
+-------
+1."verify" refers to a method used to check if a specific condition on a web page is true
+2.Even if the condition becomes fail , it will not throw any assertion error . 
+3.It will not stop my program execution . 
+
+
+Types of assertion 
+---------------------
+1.Hard assertion 
+2. Soft assertion 
+
+
+1.Hard Assertion 
+-------------------
+*it is a way of verifying that a certain piece of code is working as expected.
+*When an assert statement is executed, it compares the actual outcome of a test with the expected outcome. 
+*If the two outcomes match, the assert statement passes and the test continues. 
+*If the actual outcome does not match the expected outcome, the assert statement fails and the test is halted. 
+* the test is marked as failed.
+
+2.Soft assertion 
+------------------
+*Soft assertions are the ones in which the test execution does not stop if the test does not meet the assertion 
+condition. 
+
+*The remaining tests are executed. All the above methods also work with soft assertions
+
+
+common methods available is assert
+--------------------------------------------
+i) assertEquals ():
+	
+	This method takes a minimum of 2 arguments and can compare strings , Integers , 
+	Doubles and many more variables 
+ii)assertNotEquals()
+	
+	This method does the opposite of the assertEquals() method 
+
+iii)assertTrue():
+		
+	This method varifies the boolean values returned by the  condition .If the boolean value is true ,then 
+	the assertion passes the test cases 
+
+iv)assertFalse():
+
+	This method works the opposite of assrtTrue().If the boolean value returned by the condition is false , the
+	assertion passes the test cases 
+
+v)asserNull():
+
+	This method verifies if the expected output is null and if not then the value returned is false 
+
+vi)assertNotNull():
+
+	This method works opposite to the asserNull() nd the assertion condition is met when the method validated the 
+	expected output to be not null.
+
+
+
+example 
+----------
+package annotations;
+
+import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+public class AssertionDemo {
+	WebDriver driver ;
+	
+	
+	@BeforeMethod
+	public void browserSetup() {
+		driver = new ChromeDriver();
+		driver.get("https://www.facebook.com/");
+	}
+	
+	@Test
+	public void verifyPageTitle() {
+		
+		@Nullable
+		String title = driver.getTitle();
+		
+//		Assert.assertEquals(title, "Facebook – log in or sign up") hard asser
+		
+		//soft assert 
+		
+		SoftAssert s = new SoftAssert();
+		
+		s.assertEquals(title, "Facebook – log in or sign up", "page title verification failed");
+		
+		System.out.println("--verification completed--");
+		
+		
+		s.assertAll();
+		
+	}
+	
+	
+	@Test
+	public void loginVerify() {
+		WebElement login = driver.findElement(By.name("login"));
+		
+//		Assert.assertFalse(login.isDisplayed()); hard assert
+		
+		//soft assert 
+		SoftAssert s = new SoftAssert();
+		s.assertFalse(login.isDisplayed());
+		System.out.println("login verification completed");
+		
+		s.assertAll();
+	}
+	
+	
+	@AfterMethod
+	public void tearDown() {
+		driver.quit();
+	}
+	
+	
+	
+}
+
+==========================================================================
+Data Driven in TestNg 
+================
+*using parameters (Or) parameterization 
+*using dataProvider 
+
+1.using parameters (Or) parameterization 
+--------------------------------------------------
+*A "parameter" is a dynamic input value that can be passed directly to a test method, enabling you to run the same test with
+ different data sets without duplicating code, essentially allowing for flexible test execution with various input values using 
+the @Parameters annotation; this is particularly useful for scenarios where you want to test functionality with different data 
+combinations without rewriting the test logic each time
+
+steps 
+------
+we need xml file 
+add <parameters> tag, name and its value  in xml file 
+we need to bind the given parameters in our test case by using @parameters annotation 
+we need to trigger the execution from xml  file
+
+
+example 
+---------
+package org.test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+public class DataDriven {
+
+	WebDriver driver;
+	
+	@Parameters({"url"})
+	@BeforeMethod
+	public void fbUrl(String url) {
+		driver = new ChromeDriver();
+		driver.get(url);
+	}
+	
+	@Parameters({"username","password"})
+	@Test
+	public void fbLogin(String uname,String passwrd) {
+		System.out.println("hi");
+		driver.findElement(By.xpath("//input[@name='email']")).sendKeys(uname);
+		driver.findElement(By.xpath("//input[@name='pass']")).sendKeys(passwrd);
+		driver.findElement(By.xpath("//button[@name='login']")).click();
+	}
+}
+
+
+
+
+ ==================================================================
+*using dataProvider 
+----------------------------
+Data providers are a feature of TestNG, a popular Java-based testing framework, that allow you to pass different sets of data 
+to a test method. This can help you create more flexible and reusable tests, as well as reduce code duplication and hard-coding.
+
+
+
+example 
+---------
+package org.test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+package org.testng;
+
+import java.applet.Applet;
+import java.time.Duration;
+
+import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+public class DataProviderDemo {
+	WebDriver driver;
+	Adactin login;
+	@BeforeMethod
+	private void browsersetup() {
+		// TODO Auto-generated method stub
+		driver = new ChromeDriver();
+		driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		
+		login = new Adactin();
+	}
+	
+	@Test(dataProvider = "value")   //chrome , orangehrm 
+	private void orangehrmlDetails(String browsername,String appplicationname) {
+		// TODO Auto-generated method stub
+		System.out.println(browsername);
+		System.out.println(appplicationname);
+}
+	
+	
+	@Test(dataProvider = "datas")  //{   {user,pass}   ,{user,pass}  ,{user,pass}   }
+	
+	private void loginverification(String username , String password) throws InterruptedException {
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		driver.findElement(By.name("username")).sendKeys(username);
+		driver.findElement(By.name("password")).sendKeys(password);
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		
+		Thread.sleep(2000);
+		@Nullable
+		String currentUrl = driver.getCurrentUrl();
+		
+		Assert.assertTrue(currentUrl.contains("dashboard"));
+	}
+	
+	
+	
+	@AfterMethod
+	private void teardown() {
+		// TODO Auto-generated method stub
+		driver.quit();
+	}
+	
+	
+	@DataProvider
+	public String[] value() {
+		
+		String [] arr = {"chrome","orange hrm"};
+		
+		return arr;
+	}
+	
+	
+	@DataProvider
+	public Object[][] datas() {
+		Object [][] arr = { 
+				{"oranium123","12345"},
+				{"priya123","priya@321"},
+				{"Admin","admin123"}
+		};
+		
+		
+		return arr;
+	}
+			
+}
+
+
+//{1,2,3,4,5,6,7}
+
+//  { {1,2},{2,3},{4,5 }   }
+
+==================================================================
+property file 
+-----------
+*properties is a file extension for files mainly used in Java-related technologies to store the configurable parameters of an 
+application
+
+*You can easily read properties from some file using an object of type Properties.
+
+*Extension --> properties
+
+
+property file 
+--------------
+keyname=data
+keyname = data 
+.
+.
+
+null , data 
+
+
+
+example 
+----------
+package org.test;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+
+public class PropertiesDemo {
+
+	public static void main(String[] args) throws IOException {
+		
+		File f = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\configFiles\\config.properties");
+		
+		FileReader fr = new FileReader(f);
+		
+		Properties prop = new Properties();
+		
+		prop.load(fr);
+		
+		System.out.println(prop.getProperty("browser"));
+		
+	}
+}
+
+
+
+
+
+example 
+----------
+Test
+----------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class FbCheck extends BaseClass {
+
+	@Test
+	public void fbtitle() {
+		
+		System.out.println(driver.getTitle());
+	}
+}
+
+
+
+Baseclass
+---------
+package org.test;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+
+public class BaseClass {
+
+	WebDriver driver;
+	Properties prop ;
+	
+	
+	@BeforeMethod
+	public void setUp() throws IOException {
+		if(driver==null) {
+			File f = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\configFiles\\config.properties");
+			
+			FileReader fr = new FileReader(f);
+			
+		    prop= new Properties();
+			prop.load( fr);
+		}
+		
+		if(prop.getProperty("browser").equalsIgnoreCase("chrome")) {
+			driver = new ChromeDriver();
+			driver.get(prop.getProperty("testUrl"));
+		}
+		else if(prop.getProperty("browser").equalsIgnoreCase("edge")) {
+			driver = new EdgeDriver();
+			driver.get(prop.getProperty("testUrl"));
+		}
+		else {
+			System.out.println("Pass the valid browser name");
+		}
+	}
+	
+	
+	
+	@AfterMethod
+	public void quitPage() {
+		driver.quit();
+	}
+	
+}
+
+
+==========================================================================
+
+Dataprovider using excel sheet 
+----------------------------------------------
+baseclass
+-----------
+package org.test;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+
+public class BaseClass {
+
+	WebDriver driver;
+	Properties  prop;
+	
+	@BeforeMethod
+	public void setup() throws IOException {
+		
+		if(driver==null) {
+			File f = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\configFiles\\config.properties");
+			
+			FileReader fr = new FileReader(f);
+			
+			prop = new Properties();
+			
+			prop.load(fr);
+		}
+		
+		if(prop.getProperty("browser").equalsIgnoreCase("chrome")) {
+			
+			 driver = new ChromeDriver();
+			driver.get(prop.getProperty("testurl"));
+		}
+		else if (prop.getProperty("browser").equalsIgnoreCase("edge")) {
+		
+			driver = new EdgeDriver();
+			driver.get(prop.getProperty("testurl"));
+		}
+		
+		else {
+			System.out.println("Pass the valid browser...");
+		}
+	}
+	
+	@AfterMethod
+	public void quitPage() {
+		driver.quit();
+	}
+}
+
+
+
+
+excelReader
+------------
+package org.test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.testng.annotations.DataProvider;
+
+public class ExcelReader {
+
+	@DataProvider
+	public String[][] getdata() throws IOException {
+		File f = new File("C:\\Users\\Admin\\eclipse-workspace\\TestNg_7pm_demo\\ExcelSheet\\testData.xlsx");
+		FileInputStream stream = new FileInputStream(f);
+		 Workbook wb = new XSSFWorkbook(stream);
+		 
+		 Sheet sheet = wb.getSheet("login");
+		 
+		 int row = sheet.getPhysicalNumberOfRows();
+		 
+		 int col = sheet.getRow(0).getPhysicalNumberOfCells();
+		 System.out.println(row);
+		 System.out.println(col);
+		 DataFormatter format = new DataFormatter();
+		 String [][] testData=new String[row-1][col];   //5 2 
+		 
+//		 { {},{},{} }  // {{DATA,DATA},{DATA,}}
+		 for(int i=1;i<row;i++) {  //2  2<5   
+			 for(int j=0;j<col;j++) {  //0  0<2
+				
+				testData[i-1][j]=  format.formatCellValue(sheet.getRow(i).getCell(j));
+				//[1][0]
+				System.out.println(testData[i-1][j]);
+			 }
+		 }
+		 
+		 
+		return testData;
+		 
+	}
+}
+
+
+
+login
+-------
+package org.testng;
+
+import java.time.Duration;
+
+import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.By;
+import org.testng.annotations.Test;
+
+public class OrangeHrmlogin extends Baseclass{
+	
+	//{   {user,pass}  {}  {} }
+	@Test(dataProviderClass = ExcelReaderUsingDataprovider.class , dataProvider = "getdata" )
+	private void loginverification(String username , String password) throws InterruptedException {
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		driver.findElement(By.name("username")).sendKeys(username);
+		driver.findElement(By.name("password")).sendKeys(password);
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		
+		Thread.sleep(2000);
+		@Nullable
+		String currentUrl = driver.getCurrentUrl();
+		
+		Assert.assertTrue(currentUrl.contains("dashboard"));
+	}
+
+}
+
+
+=============================================================================================
+cross browser testing 
+--------------------------
+cross Browser testing involves comparing and analyzing the behaviour of your website in different browser 
+environemnts.
+
+
+utility
+-------
+package org.utility;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.DataProvider;
+
+public class Utility {
+	
+	
+	
+	
+	public static WebDriver driver;
+	
+	public static WebDriver browserSetup(String browsername,String url) {
+		
+		if(browsername.equalsIgnoreCase("chrome")) {
+			driver = new ChromeDriver();
+		}
+		else if(browsername.equalsIgnoreCase("edge")) {
+			 driver = new EdgeDriver();
+		}
+		else if (browsername.equalsIgnoreCase("firefox")) {
+			 driver = new FirefoxDriver();
+		}
+		else {
+			System.out.println("Invalid browser name");
+		}
+		
+		driver.get(url);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		return driver;
+	}
+	
+	
+	
+	
+
+}
+
+
+ test
+----------
+package org.test;
+
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+import org.utility.Utility;
+
+public class CrossBrowser {
+	
+	@Parameters({"browser","url"})
+	@BeforeMethod
+	public void setup(String browser,String url) {
+		Utility.browserSetup(browser, url);
+		
+	}
+	
+	@Test
+	public void titleVerification() {
+		Assert.assertEquals(Utility.driver.getTitle(), "OrangeHRM");
+	}
+	
+	@AfterMethod
+	public void tear() {
+		Utility.driver.quit();
+	}
+	
+	
+
+}
+
+
+
+
+
+xml
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="chrometest">
+  	<parameter name="browser" value="chrome"></parameter>
+  	<parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"></parameter>
+    <classes>
+      <class name="org.test.CrossBrowser"/>
+    </classes>
+  </test> <!-- Test -->
+  
+  <test thread-count="5" name="edgetest">
+  	<parameter name="browser" value="edge"></parameter>
+  	<parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"></parameter>
+    <classes>
+      <class name="org.test.CrossBrowser"/>
+    </classes>
+  </test> <!-- Test -->
+  
+  <test thread-count="5" name="firefoxtest">
+  	<parameter name="browser" value="firefox"></parameter>
+  	<parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"></parameter>
+    <classes>
+      <class name="org.test.CrossBrowser"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+============================================================================================================================
+Parallel Testing 
+-------------------
+Parallel Testing refers to a software technique or process that leverages automation testing capabilities 
+to execute the same test simultaneously in multiple environments , real devices , and browser
+
+3 levels 
+--------
+test 
+methods 
+class
+
+method 
+---------
+
+class 1
+---------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class Class1 {
+
+	@Test
+	public void m1() {
+		System.out.println(System.currentTimeMillis());
+		System.out.println("method 1");
+	}
+}
+
+
+
+
+class 2
+------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class Class2 {
+
+	@Test
+	public void m2() {
+		System.out.println(System.currentTimeMillis());
+		System.out.println("method 2");
+	}
+}
+
+
+
+class 3
+------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class Class3 {
+	@Test
+	public void m3() {
+		System.out.println(System.currentTimeMillis());
+		System.out.println("method 3");
+	}
+	
+	@Test
+	public void m4() {
+		System.out.println(System.currentTimeMillis());
+		System.out.println("method 4");
+	}
+}
+
+
+
+
+xml
+-----
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite parallel="methods" name="Suite">
+  <test thread-count="5" parallel="methods" name="Test">
+    <classes>
+      <class name="org.test.Class1"/>
+      <class name="org.test.Class2"/>
+      <class name="org.test.Class3"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+
+========================================================================
+grouping 
+----------
+Grouping in TestNG is a feature that lets you organize test cases into logical groups. 
+This helps you manage and execute tests more efficiently. 
+
+
+
+meta grouping 
+----------------
+In TestNG, "meta grouping" refers to the concept of creating a group that includes other groups, essentially allowing you 
+to group groups together, providing a hierarchical structure for organizing your test cases and enabling more granular 
+control over which tests to run based on these meta-groups; you can think of it as a "group of groups.
+
+
+exmaole 
+---------------
+class 1
+--------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class Class1 {
+
+	@Test(groups = {"sanity"})
+	private void method1() {
+	System.out.println(System.currentTimeMillis());
+	System.out.println("Method 1");
+	}
+	
+}
+
+
+
+class 2
+--------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class Class2 {
+
+	@Test(groups = {"smoke","regression"})
+	private void class2method1() {
+	System.out.println(System.currentTimeMillis());
+	System.out.println("class2Method 1");
+	}
+	
+	@Test(groups = {"sanity","smoke"})
+	private void class2method2() {
+	System.out.println(System.currentTimeMillis());
+	System.out.println("class2Method 2");
+	}
+}
+
+
+
+class 3
+---------
+package org.test;
+
+import org.testng.annotations.Test;
+
+public class Class3 {
+
+	@Test(groups = {"regression"})
+	private void class3method1() {
+	System.out.println(System.currentTimeMillis());
+	System.out.println("class3Method 1");
+ead-count="5" name="Test">
+  
+  <groups>
+  		<define name="day-group">
+  				<include name="regression"></include>
+  				<include name="sanity"></include>
+  		</define>
+  		
+  		<define name="quaterly-group">
+  				<include name="regression"></include>
+  				<include name="smoke"></include>  				
+  		</define>
+  		
+  		<define name="monthly-group">
+  				<include name="smoke"></include>
+  		</define>
+  		
+  		<run>
+  				<include name="day-group"></include>
+  		</run>
+  </groups>  
+    <classes>
+      <class name="org.test.Class1"/>
+      <class name="org.test.Class2"/>
+      <class name="org.test.Class3"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+
+==============================================================================
+Listeners
+---------
+In TestNG, listeners are interfaces that monitor various events during the test execution cycle (such as a test starting, passing, or failing) and allow you to execute custom code in response
+
+3 types 
+---------
+1.ITestListener 
+2.IRetryAnalyzer 
+3.IAnnotationTransformer
+
+1.ITestListener 
+---------------
+It is an interface
+
+Example
+-------
+package org.listeners;
+
+import java.awt.AWTException;
+import java.io.IOException;
+
+import org.test.OrangrHrmUsingDataprovider;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+public class MyTestListener implements ITestListener{
+
+
+	public void onStart(ITestContext context) {
+	   System.out.println("On class started");
+	  }
+	
+	public void onTestStart(ITestResult result) {
+	    // not implemented
+		System.out.println("On test started");
+	  }
+	
+	
+	public void onTestSuccess(ITestResult result) {
+	    // not implemented
+		System.out.println("On test success");
+	  }
+	
+	public void onTestFailure(ITestResult result) {
+	    // not implemented
+		System.out.println("on test failure");
+		try {
+			OrangrHrmUsingDataprovider.captureCompleteScreenshot();
+		} catch (AWTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  }
+	
+	public void onTestSkipped(ITestResult result) {
+	    // not implemented
+		System.out.println("on test skipped");
+	  }
+	
+	
+	public void onFinish(ITestContext context) {
+	    // not implemented
+		System.out.println("on class finish");
+	  }
+	
+}
+
+
+
+
+package org.test;
+
+import java.awt.AWTException;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+
+import javax.imageio.ImageIO;
+
+import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.By;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.utility.BaseClass;
+import org.utility.Utility;
+
+public class OrangrHrmUsingDataprovider extends BaseClass{
+	
+	@Test(dataProviderClass = Utility.class , dataProvider = "getDatasFromExcel" )
+	public void orangeHrmLogin(String username , String password) throws InterruptedException {
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.findElement(By.name("username")).sendKeys(username);;
+		driver.findElement(By.name("password")).sendKeys(password);
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		
+		Thread.sleep(2000);
+		
+		@Nullable
+		String currentUrl = driver.getCurrentUrl();
+		
+		Assert.assertTrue(currentUrl.contains("dashboard"));
+	}
+	
+	
+
+	public static void captureCompleteScreenshot() throws AWTException, IOException {
+		
+		Robot r = new Robot();
+		
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		Rectangle rect = new Rectangle(d);
+		
+		BufferedImage b = r.createScreenCapture(rect);
+		
+		File dest = new File("./screenshot/orangehrm"+System.currentTimeMillis()+".png");
+		
+		ImageIO.write(b, "png", dest);
+	}
+
+	
+
+}
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	
+  <listeners>
+  		<listener class-name="org.listeners.MyTestListener"></listener>
+  </listeners>
+  <test thread-count="5" name="Test">
+    <classes>
+      <class name="org.test.OrangrHrmUsingDataprovider"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+ 
+
+======================================================================================================
+
+
+2.IRetryAnalyzer
+--------------------
+how to run the failed test cases
+------------------------------------
+i)using testng-failed.xml
+ii)using IretryAnalyzer
+
+
+example 
+--------
+package testNgListener;
+
+import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
+public class MyRetryListener implements IRetryAnalyzer{
+
+	int mincount=0;
+	int maxcount=3;
+	@Override
+	public boolean retry(ITestResult result) {
+		
+		while(mincount<maxcount) {
+			mincount++;
+			return true;
+		}
+		
+		return false;
+	}
+	
+}
+
+
+
+
+
+package org.test;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import testNgListener.MyRetryListener;
+
+public class FailedTestCase {
+
+	@Test(retryAnalyzer = MyRetryListener.class)
+	public void  testcase1() {
+		Assert.assertTrue(false);
+	}
+	
+	
+	@Test(retryAnalyzer = MyRetryListener.class)
+	public void  testcase2() {
+		Assert.assertTrue(true);
+	}
+	
+	
+	@Test(retryAnalyzer = MyRetryListener.class)
+	public void  testcase3() {
+		Assert.assertTrue(false);
+	}
+}
+
+
+========================================================================
+I ANNOTATION TRANSFORMER
+-------------------------------------------
+package testNgListener;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+import org.testng.IAnnotationTransformer;
+import org.testng.annotations.ITestAnnotation;
+
+public class MyAnnotation implements IAnnotationTransformer{
+
+	public void transform(
+		      ITestAnnotation annotation, Class testClass, Constructor 
+		      testConstructor, Method testMethod) {
+		    // not implemented
+		
+		      annotation.setRetryAnalyzer(MyRetryListener.class);
+		  }
+}
+
+
+
+
+package org.test;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import testNgListener.MyRetryListener;
+
+public class FailedTestCase {
+
+	@Test
+	public void  testcase1() {
+		Assert.assertTrue(false);
+	}
+	
+	
+	@Test
+	public void  testcase2() {
+		Assert.assertTrue(true);
+	}
+	
+	
+	@Test
+	public void  testcase3() {
+		Assert.assertTrue(false);
+	}
+}
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<listeners>
+		<listener class-name="testNgListener.MyAnnotation"></listener>
+		<listener class-name="org.listeners.MyAnnotation"></listener>
+	</listeners>
+  <test thread-count="5" name="Test">
+    <classes>
+      <class name="org.test.FailedTestCase"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+--------------------------------------------------------------------------------------------------------------------------------
+Extent report 
+----------------
+An extent report in testng is an HTML based document that provides detailed and interactive test execution 
+reports . 
+It'is an open source reporting library that can be used to create visually appealing reports for selenium test. 
+
+
+dependency -> extentreports -> 5.0.9
+
+
+example 1
+-----------
+package extentReportDemo;
+
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
+public class ExtentReportsDemo {
+
+	ExtentReports extent;
+	ExtentTest test;
+	@BeforeTest
+	public void start() {
+		ExtentSparkReporter spark = new ExtentSparkReporter(System.getProperty("user.dir")+"\\Report\\extentReport.html");
+		extent = new ExtentReports();
+		extent.attachReporter(spark);
+	}
+	
+	@Test
+	public void signIn() {
+	 test=extent.createTest("signIn page test");
+	 test.log(Status.PASS,"sign in page got pass");
+	}
+	
+	@Test
+	public void homePage() {
+		test=extent.createTest("Homepage test").assignAuthor("oranium").assignCategory("smoke").assignDevice("chrome");
+	
+		test.pass("user is on home page succesfully");
+	}
+	
+	@Test
+	public void productPage() {
+		test=extent.createTest("product page test").assignAuthor("product").assignCategory("sanity").assignDevice("chrome");
+		test.fail("product page test case got failed");
+	}
+	
+	
+	@AfterTest
+	public void tear() {
+		extent.flush();
+	}
+	
+	
+}
+
+========================================================================================

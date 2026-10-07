@@ -1,0 +1,5 @@
+﻿email,pass,validity
+priya_123@gmail.com,priya123,valid
+invalidmail,invalidpass,invalid
+anotheremail,anotherpass,invalid
+ , ,invalid

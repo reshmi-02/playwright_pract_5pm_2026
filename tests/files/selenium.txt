@@ -1,0 +1,887 @@
+selenium
+-----------
+Selenium mimics human interaction with a computer by replicating actions like clicking buttons 
+and typing text. 
+
+
+History:
+---------
+*Selenium is an open-source suite for automating web browsers.
+
+*Started around 2004 (Selenium Core, Selenium RC) and later evolved into WebDriver (Selenium 2) and then Selenium 4, which supports the W3C WebDriver protocol and CDP integration (Chrome DevTools).
+
+*Used widely for functional / UI test automation across browsers (Chrome, Firefox, Edge, Safari, legacy IE).
+
+
+Selnium Components:
+---------------------
+Selenium IDE            Record 
+Selenium RC            Remote controller
+Selenium Webdriver   Automate the web application
+Selenium Grid   run the scripts on multiple machine at the same time
+
+
+selenium webdriver
+-----------------------
+It is a interface
+
+
+browser driver
+-----------------
+It is a class
+
+browser driver is key to receiving the http request from the json wire protocol through its
+http server and send the processed request to the real browser .
+
+
+
+Java Project 
+-------------
+If you are NOT using Maven, do it this way in an Eclipse Java project:
+
+Requirements:
+Java JDK installed.
+Eclipse IDE (or other IDE).
+Selenium client JARs (download from seleniumhq).
+Browser driver executable (e.g., chromedriver.exe for Chrome).
+
+
+Step-by-step (manual)
+---------------------
+*Create a new Java Project in Eclipse: File → New → Java Project.
+*Create a package and class (e.g., selenium.OpenFacebook).
+*Download Selenium Java (zip) from selenium.dev → extract → selenium-java-x.y.z.jar plus all libs in the libs folder.
+*GoogleSelenium jar download download stable version Jar file
+*Add JARs to project build path: Right click project → Build Path → Configure Build Path → Libraries → Add External JARs → select the JARs.
+*Download ChromeDriver matching your Chrome version from chromedriver.chromium.org and place it in C:\drivers\chromedriver.exe (or another folder).
+
+*In code set system property:
+	System.setProperty("webdriver.chrome.driver", "C:\\drivers\\chromedriver.exe");
+	WebDriver driver = new ChromeDriver();
+
+*Run the Java class as a Java Application.
+Note: Manual JAR approach is fine for quick demos but harder to manage versions and transitive dependencies — prefer Maven.
+
+
+Disadvantages / Limitations of Selenium
+---------------------------------------
+	Not a full test framework — you need TestNG/JUnit for test management.
+	Browser drivers and browsers must be matched (driver ↔ browser version).
+	Not great for desktop apps or non-HTML content.
+	Flaky tests possible due to timing, async loads, dynamic pages — needs waits.
+	Requires maintenance when web pages change (locators brittle).
+	IE support is legacy and deprecated by Microsoft — use Edge IE-mode when needed.
+	Needs environment configuration for CI (drivers, headless, browser versions, proxies).
+
+Maven project 
+-------------------
+It is a open source build automation tool  and project management tool.
+it automate the source code and it is dependency management . 
+
+
+pom 
+------
+pom --> project object model 
+heart of maven
+It contains information about the project used by maven to build the project . 
+
+
+Maven setup for Eclipse (recommended)
+-------------------------------------
+Use Maven to manage dependencies. Steps:
+	In Eclipse: File → New → Other → Maven → Maven Project → choose archetype maven-archetype-quickstart.
+	Give groupId and artifactId, finish.
+	Open pom.xml and add dependencies (see next section).
+	Right click project → Run As → Maven build or run your main/test classes as usual.
+POM - Project Object Model
+
+
+
+example 
+---------
+package demo;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class BrowserSetup {
+	
+	
+	public static void main(String[] args) {
+		
+//		browser setup
+		ChromeDriver driver = new ChromeDriver();   //used to open the browser 
+		
+		driver.get("https://www.google.com/");  // used to open the url
+		
+	}
+
+}
+====================================================================================
+html 
+-------
+<!Doctype html> -->html version 
+<html> 
+	<head>
+		<title>   page title    </title>
+	</head>
+	<body>
+		tags 
+	</body>
+
+</html>
+
+
+<tagname>
+
+1 tag --> open tag + closing tag   ex:html,head,body
+void elements   --> open tag
+elements --> opentag  + content + closing tag    ex: title 
+
+attribute  
+------------
+It is used to add the additional information to the html element .
+
+It is placed inside the open tag 
+
+syntax
+---------
+ <tag  attributename="attribute value" > content </tag>
+
+===============================================================
+selenium locators 
+----------------------
+8 types of locators 
+-----------------------
+Id , class , name , tagname , linkedtext,partialLinkedText,xpath, css 
+
+
+1.id 
+------
+It is  a attribute 
+Identify the webElement using the id attribute . 
+Id attribute is unique for each element on the web page .
+
+
+syntax
+------
+findElement()
+findElements()
+
+drivername.findElement(By.id("attribute value"));
+
+
+example 
+------------
+package intro;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Intro {
+
+	public static void main(String[] args) {
+		
+		WebDriver  driver = new ChromeDriver();
+		driver.get("https://www.google.co.in/");
+		
+		WebElement element = driver.findElement(By.id("APjFqb"));
+		element.sendKeys("selenium");
+		
+	}
+}
+
+=========================================================
+2) name 
+-----------
+Identify the webelement using name attribute . 
+
+It is  a attribute 
+
+
+syntax
+--------
+drivername.findElement(By.name("name attribute value"));
+
+==============================================================
+3)LinkText
+-------------
+The link text is the text displayed on the link . All link are present in a anchor(a) tag .
+
+
+both content(or) text  , linktext
+
+
+<tag > content </tag>
+
+syntax
+---------
+drivername.findelement( By.linkText("visible text"))
+
+================================================================
+
+4.partial link text 
+---------------------
+the partial link text is the text displayed on the link 
+
+syntax
+--------
+drivername.findElement(By.partialLinkText("visible text"));
+
+=========================================================
+5.class
+---------
+It is a attribute 
+it is used to locate more than one elements.
+
+syntax
+--------
+drivername.findElements(By.className("class attribute value"));
+===========================================================
+6.Tagname 
+--------------
+we can use the html tag as a locator to identify the web element . 
+it is used to locate more than one elements.
+
+syntax
+---------
+driver.findElements(By.tagName("tag name"));
+
+=============================================================
+7.xpath 
+---------
+It is used to find the element in the document . 
+
+2 types 
+---------
+1.absolute 
+2.relative 
+-----------------
+
+1.absolute xpath 
+--------------------
+It starts its search from the root node .
+
+--> / (represent the absolute xpath)
+
+
+/html/body/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/a
+
+disadvantage 
+
+length 
+if the developer change any node inbetween , our entire  xpath will get collapse .
+
+
+
+================================================================
+2.relative 
+-----------
+It will start its search directly on the desired node. 
+
+// (represent the relative )
+
+//*[@id="APjFqb"]
+
+================================================================
+
+relative 
+---------
+1.xpath methods 
+2.xpath axes 
+
+1.xpath methods 
+---------------------
+i)using attribute name and attribute value 
+-----------------------------------------------------------
+
+path syntax
+---------------
+//tagname[ @attributename='attribute value' ]
+
+
+
+syntax  
+---------
+drivername.findElement(By.xpath("//tagname[@attributename='attribute value']"))
+
+
+==================================================================
+ii) text() method 
+--------------------
+syntax
+--------
+//tagname[ text()='visible text' ];
+
+
+drivername.findElement(By.xapth("path"))
+===========================================================
+
+iii) contains methods --> contains()
+-------------------------
+i)contains using attributename 
+ii) contains using text()
+
+i)contains using attributename 
+-----------------------------------------
+syntax
+-------
+//tagname[contains(@attributename,partial attribute value)]
+
+
+
+ii) contains using text()
+----------------------------
+//tagname[contains(text(),'partial visible text')]
+
+
+====================================================
+iv)starts-with()
+
+syntax
+--------
+//tagname[starts-with(@attributename,'partial attribute value')]
+
+//tagname[starts-with(text(),'partial visible text')]
+
+===================================================
+v)and operator 
+------------------
+
+syntax
+--------
+//tagname[attributename=attribuvalue and text() and contains and starts-with...] 
+
+ex
+---
+//a[@class='gb_x' and text()='Gmail']
+=========================================================
+vi)or operator 
+-----------------
+//tagname[xpath or xpath....]
+
+ex
+--- 
+//a[@class='gb_' or text()='Gmail']
+
+
+=================================================================
+XPATH AXES
+----------
+1.self
+---------
+It point the current tag or current node .
+
+syntax
+---------
+//tagname[xpath]/self::*
+
+
+driver.findElement(By.xpath("path"))
+
+2.parent 
+-----------
+Traverse to the parent element from the current tag . 
+
+syntax
+-------
+//tagname[xpath]/parent::*
+
+
+
+3.Ancestor 
+-------------
+Traverse to the parent and also grandParents 
+
+syntax
+----------
+//tagname[xpath]/ancestor::*
+
+
+
+4.child 
+-------
+traverse to the child node from the current tag . 
+
+syntax
+--------
+self tag path/child::*
+
+
+
+5.descendant 
+----------------
+Traverse from the current tag to the child and grand child tags.
+
+
+syntax
+--------
+self tag path/descendant::*
+
+
+
+6.following 
+--------------
+Traverse all the tag which is present after the current tag .
+
+
+syntax
+--------
+self tag path/following::*
+
+
+
+7.Preceding 
+--------------
+Traverse all the tag which is present  before the current tag.
+
+syntax
+--------
+self tag path/preceding::*
+
+
+
+8.preceding-sibling 
+-----------------------
+Traverse the before sibling from the current tag.
+
+syntax
+--------
+self tag path/preceding-sibling::*
+
+
+
+9.Following-sibling 
+-----------------------
+Traverse the after sibling from the current tag.
+
+syntax
+--------
+self tag path/following-sibling::*
+
+========================================================================
+findelement 
+--------------
+It captures single web element .
+return type will be a webelement .
+If the element could not find in  the dom we will get NoSuchElementException
+
+findelements 
+-------------------
+It captures multiple webElement.
+Return type will be  list of web elements.
+If the element could not find in  the dom we will get [ ]
+==========================================================
+Conditional commands 
+--------------------
+1.isDisplayed()   ---> to check the visibility
+2.isSelected()  -->only for checkbox , radio button
+3.isEnabled()  ---> to check the activeness
+
+
+example 
+---------
+package intro;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class ConditionalCommands {
+ public static void main(String[] args) {
+	
+	 WebDriver driver = new ChromeDriver();
+	 driver.get("https://www.google.co.in/");
+	 
+	 
+	 WebElement text = driver.findElement(By.cssSelector("textarea[name='q']"));
+	 System.out.println(text .isDisplayed());
+	 System.out.println(text.isEnabled());
+}
+}
+
+
+========================================================
+Applicational commands 
+---------------------------------
+1)getTitle()
+2)getCurrentUrl()
+3.getPageSource()
+4.getLocation()
+5.getCssValue("css property name")
+6.getSize()
+7.getAttribute("attribute name") --> old version  , new version -->getDomAttribute("attribute name");
+8.getText()
+9.clear()
+10.sendKeys()
+11.getTagName()
+12. click()
+===========================================================
+
+Difference between close and quit 
+-----------------------------------------
+close() --> close only the currently pointed browser 
+quit() --> It will quit all the browser session windows get opened .
+
+=======================================================
+
+Navigational commands 
+--------------------------
+1)navigate().to("url")
+	to open the url 
+2)navigate().forward() 
+	it will go forward
+3)navigate().back()
+	it will go backward
+4)navigate().refresh()
+	it will referesh the page
+
+5.close 
+
+6. driver.manage.window.maximize
+
+example
+------------
+package intro;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class NavigationalCommands {
+
+	public static void main(String[] args) {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://www.google.co.in/");
+	
+		driver.manage().window().maximize();
+		driver.navigate().to("https://www.w3schools.com/java/");
+		
+	 driver.findElement(By.xpath("//a[text()='JAVASCRIPT']")).click();
+	 
+	 driver.navigate().back();
+	 driver.navigate().back();
+	 driver.navigate().refresh();
+	 driver.navigate().forward();
+	 
+	 
+	 driver.close();
+	 
+	}
+}
+
+==============================================================
+Difference between navigate.to and get method 
+-------------------------------------------------------------------
+1.get()
+-------
+*It doesn't maintain the browser history. 
+*It has inbuild waiting mechanism , so it will wait until the page gets completely loaded.
+
+2.Navigate().to()
+--------------------
+*It  maintain the browser history. 
+*It will not wait until the page gets loaded.
+---------------------------------------------------------------------------------------------------
+Mouse Related Operations 
+------------------------
+It can be perform with the help of actions class . 
+
+1.Mouse Hover 
+2.Right click 
+3.Double Click 
+4.clickAndHold
+5.Drag and Drop 
+6.Range slider using Drag and drop 
+
+Actions class
+
+1.Mouse Hover 
+------------------
+moveToElement(element)
+
+example 
+------------
+package intro;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class MouseOperations {
+ public static void main(String[] args) {
+WebDriver driver = new ChromeDriver();
+driver.get("https://www.amazon.in/ref=nav_logo");
+
+WebElement account = driver.findElement(By.xpath("//span[text()='Account & Lists']"));
+WebElement orders = driver.findElement(By.xpath("//span[text()='Your Orders']"));
+
+	Actions act=new Actions(driver);
+	
+	act.moveToElement(account).perform();
+	
+	act.moveToElement(orders).click().perform();
+ 
+ }
+}
+
+========================================================
+2.Right Click 
+---------------
+contextClick(element)
+example 
+----------
+	driver.get("https://www.google.co.in/");
+	WebElement gmail = driver.findElement(By.xpath("//a[text()='Gmail']"));
+	act.contextClick(gmail).perform();
+ 
+=============================================
+3.Doubleclick
+-----------------
+doubleClick(element)
+
+example
+----------
+                  driver.get("https://testautomationpractice.blogspot.com/");
+	WebElement field1 = driver.findElement(By.xpath("//input[@id='field1']"));
+	field1.clear();
+	field1.sendKeys("oranium");
+	
+	WebElement but = driver.findElement(By.xpath("//button[text()='CopyText']"));
+	act.doubleClick(but).perform();
+	
+ ====================================================================
+4.click and hold 
+-------------------
+clickAndHold(element)
+
+ex
+---
+
+WebDriver driver = new ChromeDriver();   //browser setup 
+		
+		driver.get("https://letcode.in/buttons");   //url setup 
+		
+		WebElement element = driver.findElement(By.xpath("//h2[normalize-space()='Button Hold!']"));
+
+		Actions a = new Actions(driver);
+		
+		a.clickAndHold(element).perform();
+		
+======================================================================
+5.drag and drop 
+--------------------
+dragAndDrop(element,element);
+
+example 
+-----------
+88	driver.get("http://www.dhtmlgoodies.com/packages/dhtml-suite-for-applications/demos/demo-drag-drop-3.html");
+	
+	WebElement capital1 = driver.findElement(By.xpath("//div[@id='dropContent']/div[@id='box4']"));
+	WebElement country = d river.findElement(By.xpath("//div[@id='countries']/div[@id='box104']"));
+                   
+	act.dragAndDrop(capital1,country1).perform();
+
+=====================================================================
+6.range slider 
+-----------------
+dragAndDropBy(element , x, y )
+
+example 
+---------
+		WebElement minimum = driver.findElement(By.xpath("//div[@id='slider-range']/span[1]"));
+		WebElement maximum = driver.findElement(By.xpath("//div[@id='slider-range']/span[2]"));
+	
+		Point minloc = minimum.getLocation();
+		Point maxloc = maximum.getLocation();
+		
+		System.out.println(minloc);
+		System.out.println(maxloc);
+		
+		act.dragAndDropBy(minimum, 100, 0).perform();
+		act.dragAndDropBy(maximum, -100, 0).perform();
+
+====================================================================
+Actions class for keyboard action 
+------------------------------------------------
+example
+----------
+package intro;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class KeyboardAction {
+
+	public static void main(String[] args) {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://en-gb.facebook.com/");
+		WebElement email = driver.findElement(By.xpath("//input[@id='email']"));
+	
+	Actions act = new Actions(driver);
+	act.sendKeys(email,"oranium").perform();
+	
+//	select the text (ctrl+a)
+	
+	act.keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL).build().perform();
+	
+//	ctrl+c
+	
+	act.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
+	
+	
+//	tab
+	act.sendKeys(Keys.TAB).perform();
+	
+//	ctrl+v
+	
+	act.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
+	
+//	tab
+	act.sendKeys(Keys.TAB).perform();
+//	tab
+	act.sendKeys(Keys.TAB).perform();
+	//enter 
+	act.sendKeys(Keys.ENTER).perform();
+	
+	}
+}
+
+
+====================================================
+
+Check box and radio 
+-------------------------
+example 
+-----------
+package intro;
+
+import java.util.List;
+
+import org.jspecify.annotations.Nullable;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Radio {
+
+	public static void main(String[] args) {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://testautomationpractice.blogspot.com/");
+		
+		
+		
+		List<WebElement> days = driver.findElements(By.xpath("//input[contains(@id,'day')]"));
+		System.out.println(days.size());
+		
+		for(WebElement e :days) {
+			
+			@Nullable
+			String attribute = e.getAttribute("id");
+			if(attribute.equals("monday")  || attribute.equals("tuesday")) {
+				e.click();
+			}
+			
+		}
+		
+//		for(int i=0;i<days.size();i++) {
+//			
+//			 days .get(i).click();
+//		}
+		
+//		for(WebElement e :days) {
+//			
+//			e.click();
+//		}
+		
+		
+//		
+//		WebElement male = driver.findElement(By.xpath("//input[@id='male']"));
+//		System.out.println(male.isSelected());
+//		
+//		male.click();
+//		System.out.println(male.isSelected());
+//		
+//		
+//		driver.findElement(By.xpath("//input[@id='female']")).click();
+		
+	}
+}
+
+Task 
+------
+click only last two values ->
+click only first two values 
+odd , even 
+=========================================================
+Handling Alerts 
+--------------------
+It is a popup boxes.
+
+drivername.switchTo.alert()
+
+
+i)alert 
+--------
+It is a webElement 
+
+It contains only ok button
+
+
+ii)confirm 
+------------
+It contains ok and cancel button 
+
+
+iii)prompt
+------------
+ It contains textbox,ok and cancel button. 
+
+=====================================================================\
+
+example 
+-----------
+package intro;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Alerts {
+ public static void main(String[] args) {
+	
+	 WebDriver driver = new ChromeDriver();
+	 driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+	 
+driver.findElement(By.xpath("//button[text()='Click for JS Alert']")).click();
+    Alert alert = driver.switchTo().alert();
+    alert.accept();
+    
+    driver.findElement(By.xpath("//button[text()='Click for JS Confirm']")).click();
+    Alert alert2 = driver.switchTo().alert();
+    alert2.dismiss();
+    
+    driver.findElement(By.xpath("//button[text()='Click for JS Prompt']")).click();
+    Alert alert3 = driver.switchTo().alert();
+    alert3.sendKeys("hello");
+    alert3.accept();
+    
+}
+}
+
+==========================================================
